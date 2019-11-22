@@ -1,0 +1,113 @@
+<PAMDataset>
+  <Subdataset name="MODIS_Grid_500m_2D:sur_refl_b04_1">
+    <PAMDataset>
+      <Metadata>
+        <MDI key="add_offset">0</MDI>
+        <MDI key="add_offset_err">0</MDI>
+        <MDI key="ArchiveMetadata">GROUP = ARCHIVEDMETADATA
+  GROUPTYPE = MASTERGROUP
+
+  OBJECT = LONGNAME
+    NUM_VAL = 1
+    VALUE = "MODIS/Aqua Surface Reflectance Daily L2G Global 1km and 500m SIN Grid"
+  END_OBJECT = LONGNAME
+
+  GROUP = PROJECT
+
+    OBJECT = INSTRUMENTNAME
+      NUM_VAL = 1
+      VALUE = "MODIS"
+    END_OBJECT = INSTRUMENTNAME
+
+    OBJECT = PROCESSINGCENTER
+      NUM_VAL = 1
+      VALUE = "MODAPS"
+    END_OBJECT = PROCESSINGCENTER
+
+  END_GROUP = PROJECT
+
+  OBJECT = PROCESSINGENVIRONMENT
+    NUM_VAL = 1
+    VALUE = "UNKNOWN"
+  END_OBJECT = PROCESSINGENVIRONMENT
+
+  OBJECT = PRODUCTIONHISTORY
+    NUM_VAL = 1
+    VALUE = "/MODAPSlads/SDPToolkit/bin/geoloco, version : 2.1.2
+
+"
+  END_OBJECT = PRODUCTIONHISTORY
+
+  GROUP = BOUNDINGRECTANGLE
+
+    OBJECT = NORTHBOUNDINGCOORDINATE
+      NUM_VAL = 1
+      VALUE = 3891826.819183
+    END_OBJECT = NORTHBOUNDINGCOORDINATE
+
+    OBJECT = SOUTHBOUNDINGCOORDINATE
+      NUM_VAL = 1
+      VALUE = 3558370.371526
+    END_OBJECT = SOUTHBOUNDINGCOORDINATE
+
+    OBJECT = EASTBOUNDINGCOORDINATE
+      NUM_VAL = 1
+      VALUE = -10584258.442886
+    END_OBJECT = EASTBOUNDINGCOORDINATE
+
+    OBJECT = WESTBOUNDINGCOORDINATE
+      NUM_VAL = 1
+      VALUE = -11409895.817467
+    END_OBJECT = WESTBOUNDINGCOORDINATE
+
+  END_GROUP = BOUNDINGRECTANGLE
+
+END_GROUP = ARCHIVEDMETADATA
+
+END
+</MDI>
+        <MDI key="calibrated_nt">5</MDI>
+        <MDI key="DAYNIGHTFLAG">Day</MDI>
+        <MDI key="HDFEOSVersion">HDFEOS_V2.19</MDI>
+        <MDI key="identifier_product_doi">10.5067/MODIS/MYD09GA.006</MDI>
+        <MDI key="identifier_product_doi_authority">http://dx.doi.org</MDI>
+        <MDI key="INPUTPOINTER">, MYD09GA.A2019300.h08v05.006.2019302032611.hdf</MDI>
+        <MDI key="l2g_storage_format_1km">compact</MDI>
+        <MDI key="l2g_storage_format_500m">compact</MDI>
+        <MDI key="LOCALGRANULEID">MYD09GA.A2019300.h08v05.006.2019302032611.gs_000501391795.hdf</MDI>
+        <MDI key="long_name">500m Surface Reflectance Band 4 - first layer</MDI>
+        <MDI key="maximum_observations_1km">12</MDI>
+        <MDI key="maximum_observations_500m">2</MDI>
+        <MDI key="Nadir Data Resolution">500m</MDI>
+        <MDI key="NumberLandWater1km">28934, 1110295, 15425, 5468, 0, 284, 51240, 228354, 0</MDI>
+        <MDI key="NumberLandWater500m">57868, 2220590, 30850, 10936, 0, 568, 102480, 456708, 0</MDI>
+        <MDI key="PGEVERSION">UNKNOWN</MDI>
+        <MDI key="PRODUCTIONDATETIME">2019-11-18T19:45:19</MDI>
+        <MDI key="Proj4String">+a=6371007.181000 +b=6371007.181000 +no_defs +proj=sinu
+</MDI>
+        <MDI key="RANGEBEGINNINGDATE">2019-10-27</MDI>
+        <MDI key="RANGEBEGINNINGTIME">00:00:00</MDI>
+        <MDI key="RANGEENDINGDATE">2019-10-27</MDI>
+        <MDI key="RANGEENDINGTIME">23:59:59</MDI>
+        <MDI key="scale_factor">10000</MDI>
+        <MDI key="scale_factor_err">0</MDI>
+        <MDI key="SHORTNAME">MYD09GA</MDI>
+        <MDI key="total_additional_observations_1km">2649418</MDI>
+        <MDI key="total_additional_observations_500m">498639</MDI>
+        <MDI key="units">reflectance</MDI>
+        <MDI key="valid_range">-100, 16000</MDI>
+        <MDI key="VERSIONID">006</MDI>
+        <MDI key="_FillValue">-28672</MDI>
+      </Metadata>
+      <Metadata domain="OVERVIEWS">
+        <MDI key="OVERVIEW_FILE">:::BASE:::MYD09GA.A2019300.h08v05.006.2019302032611.gscs_000501391795.hdf_0.ovr</MDI>
+      </Metadata>
+      <Metadata domain="Esri">
+        <MDI key="PyramidResamplingType">NEAREST</MDI>
+      </Metadata>
+      <PAMRasterBand band="1">
+        <Description>500m Surface Reflectance Band 4 - first layer</Description>
+      </PAMRasterBand>
+    </PAMDataset>
+  </Subdataset>
+</PAMDataset>
