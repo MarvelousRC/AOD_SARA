@@ -7,6 +7,7 @@ import numpy as np
 import math
 import cartopy.crs as ccrs
 from pyhdf.SD import SD, SDC
+import seaborn as sns
 
 
 def load_data(FILEPATH):
@@ -92,7 +93,9 @@ def read_data2(file_name):
 
     reflectance_scales = EV_500_RefSB_attrs['reflectance_scales'][0]
     reflectance_offsets = EV_500_RefSB_attrs['reflectance_offsets'][0]
-    units = EV_500_RefSB_attrs['reflectance_units'][0]
+    radiance_scales = EV_500_RefSB_attrs['radiance_scales'][0]
+    radiance_offsets = EV_500_RefSB_attrs['radiance_offsets'][0]
+    # units = EV_500_RefSB_attrs['reflectance_units'][0]
 
     reflectance = reflectance_scales * (EV_500_RefSB_data - reflectance_offsets)
 
@@ -101,40 +104,84 @@ def read_data2(file_name):
     lon_data = lon[:].astype(np.double)
     lat_data = lat[:].astype(np.double)
 
-    lon_center = lon_data.flatten()[int(lon_data.flatten().size/2)]
-    lat_center = lat_data.flatten()[int(lat_data.flatten().size/2)]
-
-    orth = ccrs.Orthographic(central_longitude=lon_center,
-                             central_latitude=lat_center,
-                             globe=None)
-    ax = plt.axes(projection=orth)
-
-    p = plt.scatter(lon_data, lat_data, c=EV_500_RefSB_data, s=1, cmap=plt.cm.jet,
-                    edgecolors=None, linewidth=0, transform=ccrs.PlateCarree())
+    return reflectance, lon_data, lat_data
+    # lon_center = lon_data.flatten()[int(lon_data.flatten().size/2)]
+    # lat_center = lat_data.flatten()[int(lat_data.flatten().size/2)]
+    #
+    # orth = ccrs.Orthographic(central_longitude=lon_center,
+    #                          central_latitude=lat_center,
+    #                          globe=None)
+    # ax = plt.axes(projection=orth)
+    #
+    # p = plt.scatter(lon_data, lat_data, c=EV_500_RefSB_data, s=1, cmap=plt.cm.jet,
+    #                 edgecolors=None, linewidth=0, transform=ccrs.PlateCarree())
 
     # Gridline with draw_labels=True doesn't work on Ortho projection.
     # ax.gridlines(draw_labels=True)
     # ax.gridlines()
     # ax.coastlines()
-    cb = plt.colorbar(p)
-    cb.set_label(units, fontsize=8)
-
-    plt.show()
-
-
-
-data = read_data2('MYD02HKM/MYD02HKM.A2019299.2125.061.2019300153403.psgscs_000501391352.hdf')
+    # cb = plt.colorbar(p)
+    # cb.set_label(units, fontsize=8)
+    #
+    # plt.show()
 
 
-def show_histogram(data):
-    """data should be a pandas Data Frame"""
-    fig, ax = plt.subplots(1, 1, figsize=(10, 10))
-    ax.hist(data.ravel(), bins=200, density=True)
-    ax.yaxis.set_major_formatter(PercentFormatter(xmax=1))
-    ax.set_title('A Histogram of the DN values')
-    ax.set_xlabel('DN')
-    ax.set_ylabel('Frequency')
-    fig.show()
+read_data2('MYD02HKM/MYD02HKM.A2019299.2130.061.2019300153603.psgscs_000501391352.hdf')
+
+
+def read_data3(data_type):
+    pathName = data_type
+    data_dict = []
+    num = 0
+
+    if data_type == 'MYD02HKM':
+        for file in glob.glob(pathName + "/" + pathName + "*.hdf"):
+            print(file)
+            info = file.split('.')
+            year = info[1][1:5]
+            dayofyear = info[1][5:8]
+            hour = info[2][0:2]
+            minute = info[2][2:4]
+            collection = info[3]
+            data, lon, lat = read_data2(file)
+            data_dict.append({
+                'id': num,
+                'type': data_type,
+                'year': int(year),
+                'dofy': int(dayofyear),
+                'hour': int(hour),
+                'minute': int(minute),
+                'collection': collection,
+                'data': data,
+                'lon': lon,
+                'lat': lat
+            })
+            num += 1
+    elif data_type == 'MYD09GA':
+        for file in glob.glob(pathName + "/" + pathName + "*.hdf"):
+            print(file)
+            info = file.split('.')
+            year = info[1][1:5]
+            dayofyear = info[1][5:8]
+            data, lon, lat = read_data2(file)
+            data_dict.append(
+                dict(id=num, type=data_type, year=int(year), dofy=int(dayofyear), data=data, lon=lon, lat=lat))
+            num += 1
+    return data_dict
+
+
+def show_histogram(data, name=''):
+    ravel = data.ravel()
+    sns.distplot(ravel, bins=200, hist=True, kde=True, color='darkblue', kde_kws={'linewidth':3})
+    # fig, ax = plt.subplots(1, 1, figsize=(10, 10))
+    # ravel = data.ravel()
+    # weights = np.ones_like(ravel)/float(len(ravel))
+    # ax.hist(ravel, bins=200, density=True, weights=weights)
+    # ax.yaxis.set_major_formatter(PercentFormatter(xmax=1))
+    # ax.set_title('A Histogram of the DN values')
+    # ax.set_xlabel('DN')
+    # ax.set_ylabel('Frequency')
+    # fig.show()
 
 
 def show_descriptives(data):
