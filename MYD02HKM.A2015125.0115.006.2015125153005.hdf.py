@@ -2,7 +2,7 @@
 Copyright (C) 2014-2018 The HDF Group
 Copyright (C) 2014 John Evans
 
-This example code illustrates how to access and visualize a LAADS MYD02HKM v6
+This example code illustrates how to access and visualize a LAADS MYD02HKM_hdf v6
 HDF-EOS2 Swath file in Python.
 
 If you have any questions, suggestions, or comments on this example, please use
@@ -14,7 +14,7 @@ contact us at eoshelp@hdfgroup.org or post it at the HDF-EOS Forum
 
 Usage:  save this script and run
 
-    python MYD02HKM.A2015125.0115.006.2015125153005.hdf.py
+    python MYD02HKM_hdf.A2015125.0115.006.2015125153005.hdf.py
 
 The HDF-EOS2 file must be in your current working directory.
 
@@ -29,7 +29,7 @@ import cartopy.crs as ccrs
 from pyhdf.SD import SD, SDC
 
 # Open file.
-FILE_NAME = 'MYD02HKM.A2015125.0115.006.2015125153005.hdf'
+FILE_NAME = 'MYD02HKM_hdf.A2015125.0115.006.2015125153005.hdf'
 hdf = SD(FILE_NAME, SDC.READ)
 
 # Read dataset.
@@ -69,7 +69,7 @@ data = np.ma.masked_array(data, np.isnan(data))
 
 # Read geo-location data from HDF-EOS2 dumper output.
 # Run the following command to get the latitude using eos2dump tool [1].
-# $eos2dump -a1 MYD02HKM.A2015125.0115.006.2015125153005.hdf > lat_MYD02HKM.A2015125.0115.006.2015125153005.output
+# $eos2dump -a1 MYD02HKM_hdf.A2015125.0115.006.2015125153005.hdf > lat_MYD02HKM.A2015125.0115.006.2015125153005.output
 # GEO_FILE_NAME = 'lat_MYD02HKM.A2015125.0115.006.2015125153005.output'
 GEO_FILE_NAME = 'lat_MYD02HKM.A2015125.0115.006.2015125153005.output'
 latitude = np.genfromtxt(GEO_FILE_NAME, delimiter=',', usecols=[0])
@@ -78,7 +78,7 @@ lat_m  = latitude[latitude.size/2]
 latitude = latitude.reshape(data.shape)
 
 # Run the following command to get the longitude using eos2dump tool [1].
-# $eos2dump -a2 MYD02HKM.A2015125.0115.006.2015125153005.hdf > lon_MYD02HKM.A2015125.0115.006.2015125153005.output
+# $eos2dump -a2 MYD02HKM_hdf.A2015125.0115.006.2015125153005.hdf > lon_MYD02HKM.A2015125.0115.006.2015125153005.output
 # GEO_FILE_NAME = 'lon_MYD02HKM.A2010031.0035.005.2010031183706.output'
 GEO_FILE_NAME = 'lon_MYD02HKM.A2015125.0115.006.2015125153005.output'
 longitude = np.genfromtxt(GEO_FILE_NAME, delimiter=',', usecols=[0])

@@ -1,7 +1,9 @@
-wget -e robots=off -m -np -R .html,.tmp -nH --cut-dirs=3 "https://ladsweb.modaps.eosdis.nasa.gov/archive/orders/501391352/" --header "Authorization: Bearer BEF7A8AA-0893-11EA-BC34-AF780D77E571" -P /Users/weiye/Codings/2019/AOD_SARA/MYD02HKM/
-
-
-
 wget -e robots=off -m -np -R .html,.tmp -nH --cut-dirs=3 "https://ladsweb.modaps.eosdis.nasa.gov/archive/orders/501391364/" --header "Authorization: Bearer BEF7A8AA-0893-11EA-BC34-AF780D77E571" -P /Users/weiye/Codings/2019/AOD_SARA/MYD03/
 
 wget -e robots=off -m -np -R .html,.tmp -nH --cut-dirs=3 "https://ladsweb.modaps.eosdis.nasa.gov/archive/orders/501391795/" --header "Authorization: Bearer BEF7A8AA-0893-11EA-BC34-AF780D77E571" -P /Users/weiye/Codings/2019/AOD_SARA/MYD09GA/
+
+wget -e robots=off -m -np -R .html,.tmp -nH --cut-dirs=3 "https://ladsweb.modaps.eosdis.nasa.gov/archive/orders/501393041/" --header "Authorization: Bearer BEF7A8AA-0893-11EA-BC34-AF780D77E571" -P /Users/weiye/Codings/2019/AOD_SARA/MYD02HKM/
+
+wget -e robots=off -m -np -R .html,.tmp -nH --cut-dirs=3 "https://ladsweb.modaps.eosdis.nasa.gov/archive/orders/501393049/" --header "Authorization: Bearer BEF7A8AA-0893-11EA-BC34-AF780D77E571" -P /Users/weiye/Codings/2019/AOD_SARA/MYD02HKM/
+
+wget -e robots=off -m -np -R .html,.tmp -nH --cut-dirs=3 "https://ladsweb.modaps.eosdis.nasa.gov/archive/orders/501393055/" --header "Authorization: Bearer BEF7A8AA-0893-11EA-BC34-AF780D77E571" -P /Users/weiye/Codings/2019/AOD_SARA/MYD03/

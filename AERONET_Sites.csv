@@ -1,0 +1,8 @@
+Station Name, level, lon, lat, elevation, website
+UCSB, 1.5, -119.84536, 34.41543, 33.0, https://aeronet.gsfc.nasa.gov/cgi-bin/data_display_aod_v3?site=UCSB
+Mount_Wilson, 1.5, -118.05590, 34.22470, 1710.0, https://aeronet.gsfc.nasa.gov/cgi-bin/data_display_aod_v3?site=Mount_Wilson
+Santa_Monica_Colg, 1.5, 118.47113, 34.01685, 55.0, https://aeronet.gsfc.nasa.gov/cgi-bin/data_display_aod_v3?site=Santa_Monica_Colg
+USC_SEAPRISM, 1.5, -118.11782, 33.56371, 31.0, https://aeronet.gsfc.nasa.gov/cgi-bin/data_display_aod_v3?site=USC_SEAPRISM
+CalTech, 2.0, -118.12617, 34.13673, 260.0, https://aeronet.gsfc.nasa.gov/cgi-bin/data_display_aod_v3?site=CalTech
+La_Jolla, 1.5, -117.25113, 32.86846, 80.0, https://aeronet.gsfc.nasa.gov/cgi-bin/data_display_aod_v3?site=La_Jolla
+TABLE_MOUNTAIN_CA, 1.5, -117.68000, 34.38000, 2200.0, https://aeronet.gsfc.nasa.gov/cgi-bin/data_display_aod_v3?site=TABLE_MOUNTAIN_CA
