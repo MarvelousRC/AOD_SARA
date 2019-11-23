@@ -278,7 +278,7 @@ def read_data(data_type, LUT_mode=False):
         num += 1
     return data_dict
 
-
+"""
 def read_data2(file_name):
     hdf = SD(file_name, SDC.READ)
     hdf_attrs = hdf.attributes(full=1)
@@ -320,6 +320,7 @@ def read_data2(file_name):
     # cb.set_label(units, fontsize=8)
     #
     # plt.show()
+"""
 
 
 def read_data3(data_type):
