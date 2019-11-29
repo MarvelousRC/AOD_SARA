@@ -23,10 +23,10 @@ import seaborn as sns
 
 def read_MYD02(band):
     data_dict = []
-    if (band < 2 or band > 6):
+    if band < 2 or band > 6:
         return
     band = band - 2
-    for file in glob.glob("MYD02HKM/MYD02HKM*EV_500_RefSB_" + str(int(band)) + "-EV500_RefSB.tif"):
+    for file in glob.glob("MYD02HKM/MYD02HKM*EV_500_RefSB_" + str(int(band)) + "-EV_500_RefSB.tif"):
         print(file)
         info = file.split('.')
         year = info[1][1:5]
@@ -46,8 +46,9 @@ def read_MYD02(band):
     return data_dict
 
 
-def read_MYD03(year, dofy, hour, min, type):
-    for file in glob.glob("MYD03/MYD03.A{}{:03d}.{:02d}{:02d}*.{}.tif".format(year, dofy, hour, min, type)):
+def read_MYD03(year, dofy, hour, minute, field_name):
+    for file in glob.glob("MYD03/MYD03.A{}{:03d}.{:02d}{:02d}*.{}-{}.tif".format(year, dofy, hour, minute, field_name, field_name)):
+        print(file)
         if file != '':
             return gdal.Open(file, gdal.GA_ReadOnly), file
 
@@ -71,7 +72,7 @@ def alignRaster(base, to_trans, dest_path):
     dst.SetGeoTransform(base_geotrans)
     dst.SetProjection(base_proj)
 
-    gdal.ReprojectImage(to_trans, dst, base_proj, gdal.GRA_Bilinear)
+    gdal.ReprojectImage(to_trans, dst, to_trans.GetProjection(), base_proj, gdal.GRA_Bilinear)
 
     del dst
 
@@ -142,35 +143,37 @@ def preprocess_MYD02(tif_array_dict, para_array_dict):
     i = 0
     j = 0
     processed_dict = []
-    while (i < len(tif_array_dict) and j < len(para_array_dict)):
-        if (tif_array_dict[i]['year'] < para_array_dict[j]['year']):
+    while i < len(tif_array_dict) and j < len(para_array_dict):
+        if tif_array_dict[i]['year'] < para_array_dict[j]['year']:
             i += 1
             continue
-        elif (tif_array_dict[i]['year'] > para_array_dict[j]['year']):
+        elif tif_array_dict[i]['year'] > para_array_dict[j]['year']:
             j += 1
             continue
-        if (tif_array_dict[i]['dofy'] < para_array_dict[j]['dofy']):
+        if tif_array_dict[i]['dofy'] < para_array_dict[j]['dofy']:
             i += 1
             continue
-        elif (tif_array_dict[i]['dofy'] > para_array_dict[j]['dofy']):
+        elif tif_array_dict[i]['dofy'] > para_array_dict[j]['dofy']:
             j += 1
             continue
-        if (tif_array_dict[i]['hour'] < para_array_dict[j]['hour']):
+        if tif_array_dict[i]['hour'] < para_array_dict[j]['hour']:
             i += 1
             continue
-        elif (tif_array_dict[i]['hour'] > para_array_dict[j]['hour']):
+        elif tif_array_dict[i]['hour'] > para_array_dict[j]['hour']:
             j += 1
             continue
-        if (tif_array_dict[i]['min'] < para_array_dict[j]['min']):
+        if tif_array_dict[i]['minute'] < para_array_dict[j]['minute']:
             i += 1
             continue
-        elif (tif_array_dict[i]['min'] > para_array_dict[j]['min']):
+        elif tif_array_dict[i]['minute'] > para_array_dict[j]['minute']:
             j += 1
             continue
         data = tif_array_dict[i]['data'].ReadAsArray()
         data = para_array_dict[j]['refScales'] * (data - para_array_dict[j]['refOffsets'])
         tif_array_dict[i]['data'] = data
         processed_dict.append(tif_array_dict[i])
+        i += 1
+        j += 1
     return processed_dict
 
 
@@ -178,27 +181,11 @@ def to_radian(data):
     return data / 180 * math.pi / 100
 
 
-def generateGCPs(lat, lon):
-    GCP_list = []
-    n_row, n_col = np.shape(lat)
-
-    for i in range(0, n_row - 1):
-        GCPPixel = i * 2 + 1
-        for j in range(0, n_col - 1):
-            lon_gap = lon[i + 1][j] - lon[i][j]
-            lat_gap = lat[i][j + 1] - lat[i][j]
-            GCPLine = j * 2 + 1
-            GCPX = lon[i][j] + lon_gap / 4
-            GCPY = lat[i][j] + lat_gap / 4
-            gcp = gdal.GCP(GCPX, GCPY, 0, GCPPixel, GCPLine)
-            GCP_list.append(gcp)
-    return GCP_list
-
-
 # a = gdal.Open('MYD02HKM_hdf.A2019299.mosaic.061.2019326204732.pssgmcrpgs_000501393006.EV_500_RefSB_1-EV_500_RefSB.tif').ReadAsArray()
 # show_descriptives(a)
 # a = 3.134991493425332e-05 * a
 # show_descriptives(a)
+a = read_MYD02(4)
 
 
 """""""""""""""""""""""""""""""""""""""""""""
@@ -320,7 +307,6 @@ def read_data2(file_name):
     # cb.set_label(units, fontsize=8)
     #
     # plt.show()
-"""
 
 
 def read_data3(data_type):
@@ -393,3 +379,20 @@ def resample_integral_multiple(data, scale):
             new_values[i][j] = data[int(i / 2)][int(j / 2)]
     # new_values = pd.DataFrame(new_values)
     return new_values
+"""
+
+def generateGCPs(lat, lon):
+    GCP_list = []
+    n_row, n_col = np.shape(lat)
+
+    for i in range(0, n_row - 1):
+        GCPPixel = i * 2 + 1
+        for j in range(0, n_col - 1):
+            lon_gap = lon[i + 1][j] - lon[i][j]
+            lat_gap = lat[i][j + 1] - lat[i][j]
+            GCPLine = j * 2 + 1
+            GCPX = lon[i][j] + lon_gap / 4
+            GCPY = lat[i][j] + lat_gap / 4
+            gcp = gdal.GCP(GCPX, GCPY, 0, GCPPixel, GCPLine)
+            GCP_list.append(gcp)
+    return GCP_list
