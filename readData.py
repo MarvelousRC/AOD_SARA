@@ -26,20 +26,21 @@ def read_MYD02(band=4):
     if band < 2 or band > 6:
         return
     band = band - 2
-    for file in glob.glob("MYD02HKM/MYD02HKM*EV_500_RefSB_" + str(int(band)) + "-EV_500_RefSB.tif"):
+    # for file in glob.glob("MYD02HKM/MYD02HKM*EV_500_RefSB_" + str(int(band)) + "-EV_500_RefSB.tif"):
+    for file in glob.glob("MYD02_Mosaic/MYD02HKM.A*.tif"):
         print(file)
         info = file.split('.')
         year = info[1][1:5]
         dayofyear = info[1][5:8]
         hour = info[2][0:2]
         minute = info[2][2:4]
-        collection = info[3]
+        # collection = info[3]
         data_dict.append({
             'year': int(year),
             'dofy': int(dayofyear),
             'hour': int(hour),
             'minute': int(minute),
-            'collection': collection,
+            # 'collection': collection,
             'data': gdal.Open(file, gdal.GA_ReadOnly)
         })
     data_dict = sorted(data_dict, key=lambda i: (i['year'], i['dofy'], i['hour'], i['minute']))
