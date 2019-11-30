@@ -21,7 +21,7 @@ from pyhdf.SD import SD, SDC
 import seaborn as sns
 
 
-def read_MYD02(band):
+def read_MYD02(band=4):
     data_dict = []
     if band < 2 or band > 6:
         return
@@ -47,7 +47,8 @@ def read_MYD02(band):
 
 
 def read_MYD03(year, dofy, hour, minute, field_name):
-    for file in glob.glob("MYD03/MYD03.A{}{:03d}.{:02d}{:02d}*.{}-{}.tif".format(year, dofy, hour, minute, field_name, field_name)):
+    for file in glob.glob(
+            "MYD03/MYD03.A{}{:03d}.{:02d}{:02d}*.{}-{}.tif".format(year, dofy, hour, minute, field_name, field_name)):
         print(file)
         if file != '':
             return gdal.Open(file, gdal.GA_ReadOnly), file
@@ -113,7 +114,7 @@ def read_parameters_from_MYD02_HDF():
 
 def show_histogram(data, name=''):
     ravel = data.ravel()
-    sns.distplot(ravel, bins=200, hist=True, kde=True, color='darkblue', kde_kws={'linewidth':3})
+    sns.distplot(ravel, bins=200, hist=True, kde=True, color='darkblue', kde_kws={'linewidth': 3})
 
 
 def show_descriptives(data):
@@ -187,11 +188,11 @@ def to_radian(data):
 # show_descriptives(a)
 a = read_MYD02(4)
 
-
 """""""""""""""""""""""""""""""""""""""""""""
 RETIRED FUNCTIONS
 As of 20191122
 """""""""""""""""""""""""""""""""""""""""""""
+
 
 def load_data(FILEPATH):
     ds = gdal.Open(FILEPATH)
@@ -264,6 +265,7 @@ def read_data(data_type, LUT_mode=False):
         })
         num += 1
     return data_dict
+
 
 """
 def read_data2(file_name):
@@ -380,6 +382,7 @@ def resample_integral_multiple(data, scale):
     # new_values = pd.DataFrame(new_values)
     return new_values
 """
+
 
 def generateGCPs(lat, lon):
     GCP_list = []
