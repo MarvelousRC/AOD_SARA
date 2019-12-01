@@ -1,12 +1,12 @@
 """
-Last Modified: Nov 22nd, 2019
+Last Modified: Nov 30th, 2019
 This python file define the procedures where we input data.
 
 Author: WEIYE CHEN
     GitHub: @MarvelousRC
     MS Student in Geography
     Department of Geography and Geographic Information Science
-    University of Illinois at Urbana Champaign
+    University of Illinois at Urbana-Champaign
 """
 
 import gdal
@@ -21,13 +21,8 @@ from pyhdf.SD import SD, SDC
 import seaborn as sns
 
 
-def read_MYD02(band=4):
-    data_dict = []
-    if band < 2 or band > 6:
-        return
-    band = band - 2
-    # for file in glob.glob("MYD02HKM/MYD02HKM*EV_500_RefSB_" + str(int(band)) + "-EV_500_RefSB.tif"):
-    for file in glob.glob("MYD02_Mosaic/MYD02HKM.A*.tif"):
+def read_MYD02(band=4, mode=0):
+    def whatever():
         print(file)
         info = file.split('.')
         year = info[1][1:5]
@@ -43,8 +38,21 @@ def read_MYD02(band=4):
             # 'collection': collection,
             'data': gdal.Open(file, gdal.GA_ReadOnly)
         })
-    data_dict = sorted(data_dict, key=lambda i: (i['year'], i['dofy'], i['hour'], i['minute']))
-    return data_dict
+
+    data_dict = []
+    if band < 2 or band > 6:
+        return
+    band = band - 2
+    if mode == 0:
+        for file in glob.glob("MYD02HKM/Selection/MYD02HKM*EV_500_RefSB_" + str(int(band)) + "-EV_500_RefSB.tif"):
+            whatever()
+        data_dict = sorted(data_dict, key=lambda i: (i['year'], i['dofy'], i['hour'], i['minute']))
+        return data_dict
+    elif mode == 1:
+        for file in glob.glob("MYD02_Mosaic/MYD02HKM.A*.tif"):
+            whatever()
+        data_dict = sorted(data_dict, key=lambda i: (i['year'], i['dofy'], i['hour'], i['minute']))
+        return data_dict
 
 
 def read_MYD03(year, dofy, hour, minute, field_name):
@@ -53,6 +61,16 @@ def read_MYD03(year, dofy, hour, minute, field_name):
         print(file)
         if file != '':
             return gdal.Open(file, gdal.GA_ReadOnly), file
+    return None, None
+
+
+def read_MYD03_processed(year, dofy, hour, minute, field_name):
+    for file in glob.glob(
+            "MYD03/MYD03_{}/{:04d}{:03d}{:02d}{:02d}*.tif".format(year, dofy, hour, minute, field_name)):
+        print(file)
+        if file != '':
+            return gdal.Open(file, gdal.GA_ReadOnly), file
+    return
 
 
 def read_MYD09(year, dofy):
@@ -61,7 +79,7 @@ def read_MYD09(year, dofy):
             return gdal.Open(file, gdal.GA_ReadOnly), file
 
 
-def alignRaster(base, to_trans, dest_path):
+def alignRaster(base, to_trans, dest_path, scale_factor=1):
     """
     base and to_trans should both be GDAL objects
     """
@@ -77,6 +95,8 @@ def alignRaster(base, to_trans, dest_path):
     gdal.ReprojectImage(to_trans, dst, to_trans.GetProjection(), base_proj, gdal.GRA_Bilinear)
 
     del dst
+
+    return dest_path
 
 
 def read_parameters_from_MYD02_HDF():
@@ -113,8 +133,11 @@ def read_parameters_from_MYD02_HDF():
     return data_dict
 
 
-def show_histogram(data, name=''):
-    ravel = data.ravel()
+def show_histogram(data, name='', masked=False):
+    if masked:
+        ravel = np.ma.masked_values(data, 0).ravel()
+    else:
+        ravel = data.ravel()
     sns.distplot(ravel, bins=200, hist=True, kde=True, color='darkblue', kde_kws={'linewidth': 3})
 
 
@@ -136,6 +159,23 @@ def search_data(data, year, dofy, h, m=None, collection=None, approximationMode=
             return
 
     return [element for element in data if criteria(element)]
+
+
+def matrix_to_geo_tiff(filepath, matrices, gdal_type=gdal.GDT_Float64, transform=None, projection=None, nodata=None):
+    (y_res, x_res) = matrices.shape
+    driver = gdal.GetDriverByName('GTiff')
+    image = driver.Create(filepath, x_res, y_res, 1, gdal.GDT_Float32)
+    if transform is not None:
+        image.SetGeoTransform(transform)
+    if projection is not None:
+        image.SetProjection(projection)
+    band = image.GetRasterBand(1)
+    if nodata is not None:
+        band.SetNoDataValue(nodata)
+    band.WriteArray(matrices)
+    image.FlushCache()
+    # del image
+    return
 
 
 def preprocess_MYD02(tif_array_dict, para_array_dict):
@@ -170,9 +210,13 @@ def preprocess_MYD02(tif_array_dict, para_array_dict):
         elif tif_array_dict[i]['minute'] > para_array_dict[j]['minute']:
             j += 1
             continue
+        proj = tif_array_dict[i]['data'].GetProjection()
+        geotrans = tif_array_dict[i]['data'].GetGeoTransform()
         data = tif_array_dict[i]['data'].ReadAsArray()
         data = para_array_dict[j]['refScales'] * (data - para_array_dict[j]['refOffsets'])
+        data = np.ma.masked_where(data < 0, data, False)
         tif_array_dict[i]['data'] = data
+        matrix_to_geo_tiff("MYD02/TOA_{}.tif".format(tif_array_dict[i]['dofy']), data, transform=geotrans, projection=proj)
         processed_dict.append(tif_array_dict[i])
         i += 1
         j += 1
@@ -187,7 +231,7 @@ def to_radian(data):
 # show_descriptives(a)
 # a = 3.134991493425332e-05 * a
 # show_descriptives(a)
-a = read_MYD02(4)
+# a = read_MYD02(4)
 
 """""""""""""""""""""""""""""""""""""""""""""
 RETIRED FUNCTIONS
