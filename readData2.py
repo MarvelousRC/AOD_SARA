@@ -20,6 +20,7 @@ def read_myd02_cell(dofy, x, y):
 
 
 ref_raster = read_myd02(300)
+(y_res, x_res) = np.shape(ref_raster.ReadAsArray())
 
 
 def read_myd03(dofy):
@@ -33,6 +34,22 @@ def read_myd03(dofy):
 
 def read_myd09(dofy):
     return gdal.Open('MYD09_Project/A2019{}_Project_Clipped.tif'.format(dofy))
+
+
+def read_mu_s(dofy):
+    return gdal.Open('MYD03/µ_s_{:03d}.tif'.format(dofy))
+
+
+def read_mu_v(dofy):
+    return gdal.Open('MYD03/µ_v_{:03d}.tif'.format(dofy))
+
+
+def read_P_a(dofy):
+    return gdal.Open('Rayleigh_Reflectance/P_a_2019{:03d}.tif'.format(dofy))
+
+
+def read_ray(dofy):
+    return gdal.Open('Rayleigh_Reflectance/2019{:03d}.tif'.format(dofy))
 
 
 def Rayleigh_Reflectance(dofy):
@@ -69,7 +86,8 @@ def Rayleigh_Reflectance(dofy):
 
 
 def matrix_to_geo_tiff(filepath, matrices, reference=ref_raster, gdal_type=gdal.GDT_Float32):
-    (y_res, x_res) = matrices.shape
+    # (y_res, x_res) = matrices.shape
+
     driver = gdal.GetDriverByName('GTiff')
     image = driver.Create(filepath, x_res, y_res, 1, gdal_type)
     image.SetGeoTransform(reference.GetGeoTransform())
@@ -98,3 +116,6 @@ def world2Pixel(x, y, geo_transform=ref_raster.GetGeoTransform()):
 def to_radian(data):
     return data / 180 * math.pi / 100
 
+
+def load(gdal_data):
+    return gdal_data.ReadAsArray()
