@@ -123,3 +123,14 @@ def to_radian(data):
 
 def load(gdal_data):
     return gdal_data.ReadAsArray()
+
+"""
+#### WEIYE CHEN ####
+---
+MS Student in Geography
+Department of Geography and Geographic Information Science
+University of Illinois at Urbana-Champaign
+Urbana IL, USA
+---
+BS in Geographic Information Science, Zhejiang University, Hangzhou, China
+"""
