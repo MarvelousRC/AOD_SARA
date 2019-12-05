@@ -52,6 +52,10 @@ def read_ray(dofy):
     return gdal.Open('Rayleigh_Reflectance/2019{:03d}.tif'.format(dofy))
 
 
+def read_aod(dofy):
+    return gdal.Open('AOD/AOD_2019_{:03d}.tif'.format(dofy)) 
+
+
 def Rayleigh_Reflectance(dofy):
     myd03 = read_myd03(dofy)
     sensorAzimuth = to_radian(myd03['SensorAzimuth'].ReadAsArray())

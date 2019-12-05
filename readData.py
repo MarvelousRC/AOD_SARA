@@ -136,9 +136,10 @@ def read_parameters_from_MYD02_HDF():
 def show_histogram(data, name='', masked=False):
     if masked:
         ravel = np.ma.masked_values(data, 0).ravel()
+        ravel = np.ma.masked_where(ravel < 0, ravel)
     else:
         ravel = data.ravel()
-    sns.distplot(ravel, bins=200, hist=True, kde=False, color='darkblue', kde_kws={'linewidth': 3})
+    sns.distplot(ravel, bins=200, hist=True, kde=False, color='darkblue', kde_kws={'linewidth': 3}).set_title(name)
 
 
 def show_descriptives(data):
