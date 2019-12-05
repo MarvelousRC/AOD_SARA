@@ -23,8 +23,7 @@ def retrieve_aod(dofy):
     rows, cols = np.shape(toa)
 
     def calculate_right(aod, i, j):
-        numerator = math.pow(math.e, -(tau_R + aod) / mu_s[i, j]) * math.pow(math.e, -(tau_R + aod) / mu_v[i, j]) * sur[
-            i, j]
+        numerator = math.pow(math.e, -(tau_R + aod) / mu_s[i, j]) * math.pow(math.e, -(tau_R + aod) / mu_v[i, j]) * sur[i, j]
         denominator = 1 - sur[i, j] * (0.92 * tau_R + (1 - g_) * aod) * math.pow(math.e, -(tau_R + aod))
         right = 2 * toa[i, j] - ray[i, j] - 0.2 * numerator / denominator
         right = 4 * mu_s[i, j] * mu_v[i, j] / (omega_ * P_a[i, j]) * right
@@ -32,10 +31,10 @@ def retrieve_aod(dofy):
 
     aod_mat = np.zeros((rows, cols))
     aod_num_list = np.linspace(0.0, 0.3, 61)
-    for i in range(0, rows):
+    for i in range(0, 666):
         if (i % 100 == 0):
             print("Now we are working on the row {} of the day {}...".format(i, dofy))
-        for j in range(0, cols):
+        for j in range(0, 1066):
             if sur[i, j] <= 0:
                 aod_mat[i, j] = -100
                 continue
